@@ -38,13 +38,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         infoText = (TextView) findViewById(R.id.infoText);
         name_editText = (EditText) findViewById(R.id.name_editText);
 
-
-        OwningPokemonDataManager dataManager = new OwningPokemonDataManager(this);
-        ArrayList<PokemonInfo> pokemonInfos = dataManager.getPokemonInfos();
-        for(PokemonInfo pokemonInfo : pokemonInfos) {
-            Log.d("QAQ", pokemonInfo.name);
-        }
-
     }
 
     @Override
