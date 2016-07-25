@@ -2,11 +2,17 @@ package com.example.user.myapplication;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.example.user.myapplication.model.OwningPokemonDataManager;
+import com.example.user.myapplication.model.PokemonInfo;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener {
 
@@ -31,6 +37,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         infoText = (TextView) findViewById(R.id.infoText);
         name_editText = (EditText) findViewById(R.id.name_editText);
+
+
+        OwningPokemonDataManager dataManager = new OwningPokemonDataManager(this);
+        ArrayList<PokemonInfo> pokemonInfos = dataManager.getPokemonInfos();
+        for(PokemonInfo pokemonInfo : pokemonInfos) {
+            Log.d("QAQ", pokemonInfo.name);
+        }
 
     }
 

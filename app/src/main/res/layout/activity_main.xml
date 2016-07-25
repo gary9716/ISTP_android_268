@@ -30,8 +30,8 @@
             android:id="@+id/infoText"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
-            android:textSize="25dp"
-            android:layout_marginTop="30dp" />
+            android:textSize="20dp"
+            android:layout_marginTop="20dp" />
 
         <EditText
             android:layout_width="wrap_content"
@@ -40,7 +40,7 @@
             android:layout_below="@+id/infoText"
             android:layout_centerHorizontal="true"
             android:hint="請輸入你的名字"
-            android:layout_marginTop="30dp" />
+            android:layout_marginTop="20dp" />
 
         <RadioGroup
             android:layout_width="wrap_content"
