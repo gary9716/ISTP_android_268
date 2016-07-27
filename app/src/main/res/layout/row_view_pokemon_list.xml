@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/appearance_img"
+        android:src="@drawable/butterfree" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="巴大蝴"
+        android:id="@+id/name_text"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/appearance_img"
+        android:layout_marginTop="25dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="lv."
+        android:id="@+id/textView2"
+        android:layout_below="@+id/name_text"
+        android:layout_toRightOf="@+id/appearance_img"
+        android:layout_marginTop="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="25"
+        android:id="@+id/level_text"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_toRightOf="@+id/textView2"
+        android:layout_marginLeft="5dp" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/HP_bar"
+        android:layout_alignBottom="@+id/name_text"
+        android:layout_toRightOf="@+id/name_text"
+        android:layout_marginLeft="51dp"
+        android:layout_marginStart="51dp"
+        android:minWidth="160dp"
+        android:progress="50" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="170"
+        android:id="@+id/currentHP_text"
+        android:layout_alignTop="@+id/level_text"
+        android:layout_alignLeft="@+id/HP_bar" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="/"
+        android:id="@+id/textView5"
+        android:layout_alignTop="@+id/currentHP_text"
+        android:layout_toRightOf="@+id/currentHP_text"
+        android:layout_marginLeft="5dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="340"
+        android:id="@+id/maxHP_text"
+        android:layout_marginLeft="5dp"
+        android:layout_alignTop="@+id/textView5"
+        android:layout_toRightOf="@+id/textView5" />
+</RelativeLayout>
