@@ -20,6 +20,8 @@ import java.util.ArrayList;
  */
 public class PokemonListActivity extends AppCompatActivity {
 
+    PokemonListViewAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,7 +32,7 @@ public class PokemonListActivity extends AppCompatActivity {
         OwningPokemonDataManager dataManager = new OwningPokemonDataManager(this);
 
         ArrayList<PokemonInfo> pokemonInfos = dataManager.getPokemonInfos();
-        PokemonListViewAdapter adapter = new PokemonListViewAdapter(this, //context
+        adapter = new PokemonListViewAdapter(this, //context
                 R.layout.row_view_pokemon_list, //row view layout id
                 pokemonInfos); //data
 
@@ -48,6 +50,10 @@ public class PokemonListActivity extends AppCompatActivity {
         int itemId = item.getItemId();
         if(itemId == R.id.action_delete) {
             Log.d("menuItem", "action_delete");
+            for(PokemonInfo pokemonInfo : adapter.selectedPokemons) {
+                adapter.remove(pokemonInfo);
+            }
+
             return true;
         }
         else if(itemId == R.id.action_heal) {

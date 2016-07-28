@@ -24,7 +24,7 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
     int mRowLayoutId;
     LayoutInflater mInflater;
     Picasso mPicasso;
-    ArrayList<PokemonInfo> selectedPokemons;
+    public ArrayList<PokemonInfo> selectedPokemons;
 
     public PokemonListViewAdapter(Context context, int rowLayoutId, List<PokemonInfo> objects) {
         super(context, rowLayoutId, objects);
@@ -35,7 +35,12 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
     }
 
     public void onPokemonSelectedChange(PokemonInfo pokemonInfo) {
-
+        if(pokemonInfo.isSelected) {
+            selectedPokemons.add(pokemonInfo);
+        }
+        else {
+            selectedPokemons.remove(pokemonInfo);
+        }
     }
 
     @Override
@@ -124,6 +129,7 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
             int viewId = v.getId();
             if(viewId == R.id.appearance_img) {
                 setSelected();
+                mAdapter.onPokemonSelectedChange(mPokemonInfo);
             }
         }
     }
