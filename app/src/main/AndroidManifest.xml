@@ -17,6 +17,7 @@
         <activity android:name=".PokemonListActivity">
 
         </activity>
+        <activity android:name=".PokemonDetailActivity"/>
     </application>
 
 </manifest>

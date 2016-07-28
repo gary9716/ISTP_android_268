@@ -40,6 +40,7 @@ public class PokemonListActivity extends AppCompatActivity implements AdapterVie
                 pokemonInfos); //data
 
         listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
 
     }
 
