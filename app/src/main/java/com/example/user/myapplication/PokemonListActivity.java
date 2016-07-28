@@ -1,11 +1,14 @@
 package com.example.user.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -18,7 +21,7 @@ import java.util.ArrayList;
 /**
  * Created by user on 2016/7/25.
  */
-public class PokemonListActivity extends AppCompatActivity {
+public class PokemonListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     PokemonListViewAdapter adapter;
 
@@ -37,6 +40,7 @@ public class PokemonListActivity extends AppCompatActivity {
                 pokemonInfos); //data
 
         listView.setAdapter(adapter);
+
     }
 
     @Override
@@ -66,5 +70,16 @@ public class PokemonListActivity extends AppCompatActivity {
         }
 
         return false;
+    }
+
+    public final static int detailActivityRequestCode = 1;
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        PokemonInfo pokemonInfo = adapter.getItem(position);
+        Intent intent = new Intent(PokemonListActivity.this, PokemonDetailActivity.class);
+        intent.putExtra(PokemonInfo.parcelKey, pokemonInfo);
+        startActivityForResult(intent, detailActivityRequestCode);
+
     }
 }

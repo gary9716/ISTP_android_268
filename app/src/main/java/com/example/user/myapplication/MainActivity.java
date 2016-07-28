@@ -1,11 +1,15 @@
 package com.example.user.myapplication;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -18,7 +22,7 @@ import com.example.user.myapplication.model.PokemonInfo;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener,TextView.OnEditorActionListener {
 
     TextView infoText;
     RadioGroup optionGrp;
@@ -41,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         infoText = (TextView) findViewById(R.id.infoText);
         name_editText = (EditText) findViewById(R.id.name_editText);
-
+        name_editText.setOnEditorActionListener(this);
     }
 
     public final static String optionSelectedKey = "selectedOption";
@@ -122,5 +126,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     break;
             }
         }
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if(actionId == EditorInfo.IME_ACTION_DONE) {
+            Log.d("testInput","action_done");
+            InputMethodManager inm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            inm.hideSoftInputFromWindow(v.getWindowToken(),0);
+            return true;
+        }
+
+        return false;
+
     }
 }
