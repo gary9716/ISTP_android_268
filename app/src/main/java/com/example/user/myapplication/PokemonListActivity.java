@@ -2,6 +2,9 @@ package com.example.user.myapplication;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -34,5 +37,28 @@ public class PokemonListActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.list_action_bar_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.action_delete) {
+            Log.d("menuItem", "action_delete");
+            return true;
+        }
+        else if(itemId == R.id.action_heal) {
+            Log.d("menuItem", "action_heal");
+            return true;
+        }
+        else if(itemId == R.id.action_settings) {
+            Log.d("menuItem", "action_settings");
+            return true;
+        }
+
+        return false;
+    }
 }
