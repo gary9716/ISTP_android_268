@@ -1,13 +1,17 @@
 package com.example.user.myapplication;
 
+import android.content.Intent;
+import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.os.Handler;
 
 import com.example.user.myapplication.model.OwningPokemonDataManager;
 import com.example.user.myapplication.model.PokemonInfo;
@@ -40,13 +44,65 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    public final static String optionSelectedKey = "selectedOption";
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(optionSelectedKey, selectedOptionIndex);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        selectedOptionIndex = savedInstanceState.getInt(optionSelectedKey, 0);
+        ((RadioButton)optionGrp.getChildAt(selectedOptionIndex)).setChecked(true);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d("testStage", "onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d("testStage", "onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d("testStage", "onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d("testStage", "onDestroy");
+    }
+
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
         if(viewId == R.id.confirm_button) {
-            infoText.setText(String.format("你好, 訓練家%s 歡迎來到神奇寶貝的世界,你的夥伴是%s",
+
+            int changeActivityInSecs = 3;
+            infoText.setText(String.format("你好, 訓練家%s 歡迎來到神奇寶貝的世界, 你的夥伴是%s, 冒險將於%d秒後開始",
                     name_editText.getText().toString(),
-                    pokemonNames[selectedOptionIndex]));
+                    pokemonNames[selectedOptionIndex],
+                    changeActivityInSecs));
+
+            Handler handler = new Handler(MainActivity.this.getMainLooper());
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    Intent intent = new Intent(MainActivity.this, PokemonListActivity.class);
+                    startActivity(intent);
+                }
+            }, changeActivityInSecs * 1000);
+
         }
     }
 
