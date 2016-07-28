@@ -5,7 +5,10 @@ package com.example.user.myapplication.model;
  */
 public class PokemonInfo {
 
-    public int imgId;
+    public final static int numCurrentSkills = 4;
+    public static String[] typeNames;
+
+    public int listImgId;
     public String name;
     public int level;
     public int currentHP;
@@ -14,4 +17,9 @@ public class PokemonInfo {
     public boolean isSelected = false;
     public boolean isHealing = false;
 
+    //detail info
+    public int detailImgId;
+    public int type_1;
+    public int type_2;
+    public String[] skill = new String[numCurrentSkills];
 }

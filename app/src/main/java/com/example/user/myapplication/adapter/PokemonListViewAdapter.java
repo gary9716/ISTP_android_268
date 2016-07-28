@@ -49,6 +49,27 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
         return convertView;
     }
 
+    public PokemonInfo getItemWithName(String name) {
+
+        for(int i = 0;i < getCount();i++) {
+            PokemonInfo pokemonInfo = getItem(i);
+            if(name.equals(pokemonInfo.name)) {
+                return pokemonInfo;
+            }
+        }
+
+        return null;
+    }
+
+    public void update(PokemonInfo newData) {
+        PokemonInfo oldData = getItemWithName(newData.name);
+        oldData.skill = newData.skill;
+        oldData.currentHP = newData.currentHP;
+        oldData.maxHP = newData.maxHP;
+        oldData.level = newData.level;
+        notifyDataSetChanged();
+    }
+
     public static class ViewHolder {
         private ImageView appearanceImg;
         private TextView nameText;
@@ -75,7 +96,7 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
             nameText.setText(String.valueOf(pokemonInfo.name));
             int progress = (int)((((float)pokemonInfo.currentHP)/pokemonInfo.maxHP) * 100);
             hpBar.setProgress(progress);
-            mPicasso.load(pokemonInfo.imgId).into(appearanceImg);
+            mPicasso.load(pokemonInfo.listImgId).into(appearanceImg);
         }
 
 

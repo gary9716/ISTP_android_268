@@ -6,7 +6,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/appearance_img"
-        android:src="@drawable/butterfree" />
+        android:src="@drawable/list_butterfree" />
 
     <TextView
         android:layout_width="wrap_content"
