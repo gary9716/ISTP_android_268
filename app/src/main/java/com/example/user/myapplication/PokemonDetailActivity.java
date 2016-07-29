@@ -4,10 +4,12 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.user.myapplication.model.PokemonInfo;
+import com.squareup.picasso.Picasso;
 
 /**
  * Created by user on 2016/7/28.
@@ -19,6 +21,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
     String packageName;
 
     //UI
+    ImageView appearanceImg;
     TextView nameText;
     TextView levelText;
     TextView currentHP;
@@ -27,20 +30,23 @@ public class PokemonDetailActivity extends AppCompatActivity {
     TextView type_2;
     TextView[] skillText;
     ProgressBar hpBar;
+    Picasso mPicasso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detail_view);
         mRes = getResources();
+        mPicasso = Picasso.with(this);
         packageName = getPackageName();
-        mPokemonInfo = (PokemonInfo)getIntent().getParcelableExtra(PokemonInfo.parcelKey);
+        mPokemonInfo = getIntent().getParcelableExtra(PokemonInfo.parcelKey);
         skillText = new TextView[PokemonInfo.numCurrentSkills];
 
         setView();
     }
 
     private void setView() {
+        appearanceImg = (ImageView)findViewById(R.id.detail_appearance_img);
         nameText = (TextView)findViewById(R.id.name_text);
         levelText = (TextView)findViewById(R.id.level_text);
         currentHP = (TextView)findViewById(R.id.currentHP_text);
@@ -55,6 +61,8 @@ public class PokemonDetailActivity extends AppCompatActivity {
             skillText[i] = (TextView)findViewById(skillTextId);
         }
 
+        //binding data
+        mPicasso.load(mPokemonInfo.detailImgId).into(appearanceImg);
         nameText.setText(mPokemonInfo.name);
         levelText.setText(String.valueOf(mPokemonInfo.level));
         currentHP.setText(String.valueOf(mPokemonInfo.currentHP));
