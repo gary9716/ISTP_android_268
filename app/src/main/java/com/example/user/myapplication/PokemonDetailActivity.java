@@ -61,7 +61,7 @@ public class PokemonDetailActivity extends AppCompatActivity {
             skillText[i] = (TextView)findViewById(skillTextId);
         }
 
-        //binding data
+        //bind with data
         mPicasso.load(mPokemonInfo.detailImgId).into(appearanceImg);
         nameText.setText(mPokemonInfo.name);
         levelText.setText(String.valueOf(mPokemonInfo.level));
@@ -70,9 +70,17 @@ public class PokemonDetailActivity extends AppCompatActivity {
         if(mPokemonInfo.type_1 != -1) {
             type_1.setText(PokemonInfo.typeNames[mPokemonInfo.type_1]);
         }
+        else {
+            type_1.setText("");
+        }
+
         if(mPokemonInfo.type_2 != -1) {
             type_2.setText(PokemonInfo.typeNames[mPokemonInfo.type_2]);
         }
+        else {
+            type_2.setText("");
+        }
+
         for(int i = 0;i < PokemonInfo.numCurrentSkills;i++) {
             if(mPokemonInfo.skill[i] != null) {
                 skillText[i].setText(mPokemonInfo.skill[i]);
@@ -84,7 +92,6 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
         int progress = (int)((((float)mPokemonInfo.currentHP)/mPokemonInfo.maxHP) * 100);
         hpBar.setProgress(progress);
-
 
     }
 
