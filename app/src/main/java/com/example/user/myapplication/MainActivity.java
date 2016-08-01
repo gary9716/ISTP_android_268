@@ -147,16 +147,38 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
         Log.d("testStage", "onDestroy");
     }
 
+    int changeActivityInSecs = 5;
+
+    private void setInfoTextWithFormat() {
+
+        if(uiSetting == UISetting.Initial) {
+            infoText.setText(String.format("你好, 訓練家%s 歡迎來到神奇寶貝的世界, 你的夥伴是%s, 冒險將於%d秒後開始",
+                    nameOfTheTrainer,
+                    pokemonNames[selectedOptionIndex],
+                    changeActivityInSecs));
+        }
+        else if(uiSetting == UISetting.DataIsKnown){
+            infoText.setText(String.format("你好, 訓練家%s 歡迎回到神奇寶貝的世界, 你的夥伴是%s, 冒險將於%d秒後繼續",
+                    nameOfTheTrainer,
+                    pokemonNames[selectedOptionIndex],
+                    changeActivityInSecs));
+        }
+    }
+
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
         if(viewId == R.id.confirm_button) {
             v.setClickable(false);
-            int changeActivityInSecs = 3;
-            infoText.setText(String.format("你好, 訓練家%s 歡迎來到神奇寶貝的世界, 你的夥伴是%s, 冒險將於%d秒後開始",
-                    name_editText.getText().toString(),
-                    pokemonNames[selectedOptionIndex],
-                    changeActivityInSecs));
+            if(uiSetting == UISetting.Initial) {
+                nameOfTheTrainer = name_editText.getText().toString();
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString(nameEditTextKey, nameOfTheTrainer);
+                editor.putInt(optionSelectedKey, selectedOptionIndex);
+                editor.commit();
+            }
+
+            setInfoTextWithFormat();
 
             Handler handler = new Handler(MainActivity.this.getMainLooper());
             handler.postDelayed(new Runnable() {
