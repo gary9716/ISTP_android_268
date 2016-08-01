@@ -28,6 +28,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     RadioGroup optionGrp;
     EditText name_editText;
     int selectedOptionIndex = 0;
+    Button confirm_button;
     String[] pokemonNames = new String[]{
         "小火龍","傑尼龜","妙蛙種子"
     };
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button confirm_button = (Button)findViewById(R.id.confirm_button);
+        confirm_button = (Button)findViewById(R.id.confirm_button);
         confirm_button.setOnClickListener(this);
 
         optionGrp = (RadioGroup) findViewById(R.id.optionsGroup);
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         infoText = (TextView) findViewById(R.id.infoText);
         name_editText = (EditText) findViewById(R.id.name_editText);
         name_editText.setOnEditorActionListener(this);
+        name_editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
     }
 
     public final static String optionSelectedKey = "selectedOption";
@@ -131,9 +133,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
         if(actionId == EditorInfo.IME_ACTION_DONE) {
-            Log.d("testInput","action_done");
             InputMethodManager inm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             inm.hideSoftInputFromWindow(v.getWindowToken(),0);
+
+            confirm_button.performClick();
             return true;
         }
 

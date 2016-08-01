@@ -122,6 +122,7 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
         public void setSelected() {
             mPokemonInfo.isSelected = !mPokemonInfo.isSelected;
             mRowView.setActivated(mPokemonInfo.isSelected);
+            mAdapter.onPokemonSelectedChange(mPokemonInfo);
         }
 
         @Override
@@ -129,7 +130,6 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
             int viewId = v.getId();
             if(viewId == R.id.appearance_img) {
                 setSelected();
-                mAdapter.onPokemonSelectedChange(mPokemonInfo);
             }
         }
     }

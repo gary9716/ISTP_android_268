@@ -39,6 +39,7 @@
             android:id="@+id/name_editText"
             android:layout_below="@+id/infoText"
             android:layout_centerHorizontal="true"
+            android:inputType="textPersonName"
             android:hint="請輸入你的名字"
             android:layout_marginTop="20dp" />
 
