@@ -11,6 +11,7 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.user.myapplication.adapter.PokemonListViewAdapter;
 import com.example.user.myapplication.model.OwningPokemonDataManager;
@@ -80,6 +81,7 @@ public class PokemonListActivity extends AppCompatActivity implements AdapterVie
     }
 
     public final static int detailActivityRequestCode = 1;
+    public final static int removeFromList = 1;
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -87,6 +89,23 @@ public class PokemonListActivity extends AppCompatActivity implements AdapterVie
         Intent intent = new Intent(PokemonListActivity.this, PokemonDetailActivity.class);
         intent.putExtra(PokemonInfo.parcelKey, pokemonInfo);
         startActivityForResult(intent, detailActivityRequestCode);
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == detailActivityRequestCode) {
+            if(resultCode == removeFromList) {
+                String pokemonName = data.getStringExtra(PokemonInfo.nameKey);
+                PokemonInfo pokemonInfo = adapter.getItemWithName(pokemonName);
+                if(pokemonInfo != null) {
+                    adapter.remove(pokemonInfo);
+                    Toast.makeText(this, pokemonInfo.name + "已被存入電腦", Toast.LENGTH_LONG).show();
+                }
+            }
+        }
+
 
     }
 }

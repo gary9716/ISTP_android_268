@@ -9,6 +9,7 @@ import android.os.Parcelable;
 public class PokemonInfo implements Parcelable {
 
     public final static String parcelKey = "PokemonInfo.parcel";
+    public final static String nameKey = "PokemonInfo.name";
 
     public final static int numCurrentSkills = 4;
     public static String[] typeNames;
