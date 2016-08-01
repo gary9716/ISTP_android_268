@@ -22,7 +22,7 @@ import com.example.user.myapplication.model.PokemonInfo;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener,TextView.OnEditorActionListener {
+public class MainActivity extends CustomizedActivity implements View.OnClickListener,RadioGroup.OnCheckedChangeListener,TextView.OnEditorActionListener {
 
     TextView infoText;
     RadioGroup optionGrp;
@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onStop() {
         super.onStop();
         Log.d("testStage", "onStop");
+        confirm_button.setClickable(true);
     }
 
     @Override
@@ -93,7 +94,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         int viewId = v.getId();
         if(viewId == R.id.confirm_button) {
-
+            v.setClickable(false);
             int changeActivityInSecs = 3;
             infoText.setText(String.format("你好, 訓練家%s 歡迎來到神奇寶貝的世界, 你的夥伴是%s, 冒險將於%d秒後開始",
                     name_editText.getText().toString(),
@@ -107,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Intent intent = new Intent(MainActivity.this, PokemonListActivity.class);
                     intent.putExtra(optionSelectedKey, selectedOptionIndex);
                     startActivity(intent);
+                    finish();
                 }
             }, changeActivityInSecs * 1000);
 
@@ -144,4 +146,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         return false;
 
     }
+
+
 }

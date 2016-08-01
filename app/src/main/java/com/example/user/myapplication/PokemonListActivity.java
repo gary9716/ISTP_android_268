@@ -22,7 +22,7 @@ import java.util.ArrayList;
 /**
  * Created by user on 2016/7/25.
  */
-public class PokemonListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener{
+public class PokemonListActivity extends CustomizedActivity implements AdapterView.OnItemClickListener{
 
     PokemonListViewAdapter adapter;
 
