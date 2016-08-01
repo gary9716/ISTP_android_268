@@ -34,7 +34,13 @@ public class PokemonListActivity extends AppCompatActivity implements AdapterVie
 
         OwningPokemonDataManager dataManager = new OwningPokemonDataManager(this);
 
+        int selectedPokemonIndex = getIntent().getIntExtra(MainActivity.optionSelectedKey, 0);
+        PokemonInfo[] initThreePokemons = dataManager.getInitThreePokemonInfos();
+
         ArrayList<PokemonInfo> pokemonInfos = dataManager.getPokemonInfos();
+
+        pokemonInfos.add(0, initThreePokemons[selectedPokemonIndex]);
+
         adapter = new PokemonListViewAdapter(this, //context
                 R.layout.row_view_pokemon_list, //row view layout id
                 pokemonInfos); //data

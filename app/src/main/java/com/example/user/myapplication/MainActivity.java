@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 @Override
                 public void run() {
                     Intent intent = new Intent(MainActivity.this, PokemonListActivity.class);
+                    intent.putExtra(optionSelectedKey, selectedOptionIndex);
                     startActivity(intent);
                 }
             }, changeActivityInSecs * 1000);
