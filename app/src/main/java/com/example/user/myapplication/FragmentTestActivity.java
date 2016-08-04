@@ -1,6 +1,8 @@
 package com.example.user.myapplication;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,6 +17,7 @@ import com.example.user.myapplication.fragment.TestFragment;
 public class FragmentTestActivity extends AppCompatActivity implements View.OnClickListener{
 
     Fragment[] fragments;
+    FragmentManager fragmentManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,12 +36,31 @@ public class FragmentTestActivity extends AppCompatActivity implements View.OnCl
         ((LogFragment)fragments[0]).actualName = "F1";
         fragments[1] = TestFragment.newInstance("fragment 2");
         ((LogFragment)fragments[1]).actualName = "F2";
-        
-    }
 
+        fragmentManager = getFragmentManager();
+
+    }
 
     @Override
     public void onClick(View v) {
-
+        int viewId = v.getId();
+        if(viewId == R.id.replace_fragment_1) {
+            replaceWithFragment(fragments[0]);
+        }
+        else if(viewId == R.id.replace_fragment_2) {
+            replaceWithFragment(fragments[1]);
+        }
+        else if(viewId == R.id.remove_fragment_2) {
+            if(fragments[1].isAdded()) {
+                fragmentManager.beginTransaction().remove(fragments[1]).commit();
+            }
+        }
     }
+
+    private void replaceWithFragment(Fragment fragment) {
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.commit();
+    }
+
 }
