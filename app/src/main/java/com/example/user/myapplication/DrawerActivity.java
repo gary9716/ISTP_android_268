@@ -92,4 +92,23 @@ public class DrawerActivity extends AppCompatActivity{
         transaction.commit();
     }
 
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState = drawer.saveInstanceState(outState);
+        outState = headerResult.saveInstanceState(outState);
+
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        if(drawer != null && drawer.isDrawerOpen()) {
+            drawer.closeDrawer();
+        }
+        else {
+            super.onBackPressed();
+        }
+
+    }
 }
