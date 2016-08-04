@@ -1,9 +1,13 @@
 package com.example.user.myapplication;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -14,7 +18,7 @@ import com.squareup.picasso.Picasso;
 /**
  * Created by user on 2016/7/28.
  */
-public class PokemonDetailActivity extends AppCompatActivity {
+public class PokemonDetailActivity extends CustomizedActivity {
 
     PokemonInfo mPokemonInfo;
     Resources mRes;
@@ -95,6 +99,33 @@ public class PokemonDetailActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.pokemon_detail_action_bar_menu, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.action_save) {
+            Intent intent = new Intent();
+            intent.putExtra(PokemonInfo.nameKey, mPokemonInfo.name);
+            setResult(PokemonListActivity.removeFromList, intent);
+            finish();
+            return true;
+        }
+        else if(itemId == R.id.action_level_up) {
 
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        Log.d("detailStage","onDestroy");
+        super.onDestroy();
+    }
 }
