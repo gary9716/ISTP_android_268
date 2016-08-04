@@ -60,7 +60,12 @@ public class FragmentTestActivity extends AppCompatActivity implements View.OnCl
     private void replaceWithFragment(Fragment fragment) {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.fragmentContainer, fragment);
+        transaction.addToBackStack(null);
         transaction.commit();
     }
 
+    @Override
+    public void onBackPressed() {
+        fragmentManager.popBackStack();
+    }
 }
