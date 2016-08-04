@@ -27,5 +27,6 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/replace_fragment_1"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"></FrameLayout>
+        android:layout_alignParentStart="true"
+        android:id="@+id/fragmentContainer"></FrameLayout>
 </RelativeLayout>
