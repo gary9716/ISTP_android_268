@@ -4,11 +4,15 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.example.user.myapplication.model.Utils;
 import com.mikepenz.materialdrawer.AccountHeader;
 import com.mikepenz.materialdrawer.AccountHeaderBuilder;
+import com.mikepenz.materialdrawer.Drawer;
+import com.mikepenz.materialdrawer.DrawerBuilder;
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem;
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem;
 import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 
 /**
@@ -19,6 +23,7 @@ public class DrawerActivity extends AppCompatActivity{
     Toolbar toolbar;
     AccountHeader headerResult;
     IProfile profile;
+    Drawer drawer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +39,21 @@ public class DrawerActivity extends AppCompatActivity{
                 .withEmail("batman@gmail.com")
                 .withIcon(profileIcon);
 
-        
+        buildDrawerHeader(false, savedInstanceState);
+        drawer = new DrawerBuilder()
+                .withActivity(this)
+                .withAccountHeader(headerResult)
+                .inflateMenu(R.menu.drawer_menu)
+                .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
+                    @Override
+                    public boolean onItemClick(View view, int position, IDrawerItem drawerItem) {
+
+
+                        return false;
+                    }
+                })
+                .withSavedInstance(savedInstanceState)
+                .build();
 
     }
 

@@ -16,13 +16,14 @@
         </activity>
         <activity android:name=".PokemonDetailActivity"/>
         <activity android:name=".FragmentTestActivity">
+
+        </activity>
+        <activity android:name=".DrawerActivity"
+            android:theme="@style/MaterialDrawerTheme.Light.DarkToolbar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".DrawerActivity"
-            android:theme="@style/MaterialDrawerTheme.Light.DarkToolbar">
         </activity>
     </application>
 
