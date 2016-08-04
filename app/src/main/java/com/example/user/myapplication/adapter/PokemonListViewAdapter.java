@@ -82,6 +82,12 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
         notifyDataSetChanged();
     }
 
+    @Override
+    public void remove(PokemonInfo object) {
+        selectedPokemons.remove(object);
+        super.remove(object);
+    }
+
     public static class ViewHolder implements View.OnClickListener{
         private ImageView appearanceImg;
         private TextView nameText;

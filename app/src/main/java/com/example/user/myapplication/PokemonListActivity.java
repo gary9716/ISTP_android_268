@@ -73,7 +73,8 @@ public class PokemonListActivity extends CustomizedActivity implements AdapterVi
         int itemId = item.getItemId();
         if(itemId == R.id.action_delete) {
             Log.d("menuItem", "action_delete");
-            alertDialog.show();
+            if(adapter.selectedPokemons.size() > 0)
+                alertDialog.show();
             return true;
         }
         else if(itemId == R.id.action_heal) {
@@ -128,7 +129,6 @@ public class PokemonListActivity extends CustomizedActivity implements AdapterVi
             for(PokemonInfo pokemonInfo : adapter.selectedPokemons) {
                 adapter.remove(pokemonInfo);
             }
-            adapter.selectedPokemons.clear();
 
         }
 
