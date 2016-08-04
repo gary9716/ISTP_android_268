@@ -1,10 +1,23 @@
 package com.example.user.myapplication.fragment;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.user.myapplication.MainActivity;
+import com.example.user.myapplication.PokemonDetailActivity;
+import com.example.user.myapplication.R;
+import com.example.user.myapplication.adapter.PokemonListViewAdapter;
 import com.example.user.myapplication.model.OwningPokemonDataManager;
 import com.example.user.myapplication.model.PokemonInfo;
 
@@ -13,9 +26,12 @@ import java.util.ArrayList;
 /**
  * Created by user on 2016/8/4.
  */
-public class PokemonListFragment extends Fragment {
+public class PokemonListFragment extends Fragment implements AdapterView.OnItemClickListener, DialogInterface.OnClickListener{
 
     private Activity activity;
+    private ArrayList<PokemonInfo> pokemonInfos;
+    private AlertDialog alertDialog;
+    private PokemonListViewAdapter adapter;
 
     public static PokemonListFragment newInstance() {
 
@@ -34,11 +50,58 @@ public class PokemonListFragment extends Fragment {
         int selectedPokemonIndex = activity.getIntent().getIntExtra(MainActivity.optionSelectedKey, 0);
         PokemonInfo[] initThreePokemons = dataManager.getInitThreePokemonInfos();
 
-        ArrayList<PokemonInfo> pokemonInfos = dataManager.getPokemonInfos();
+        pokemonInfos = dataManager.getPokemonInfos();
         pokemonInfos.add(0, initThreePokemons[selectedPokemonIndex]);
 
     }
 
-    
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View fragmentView = inflater.inflate(R.layout.activity_pokemon_list, container, false);
+        ListView listView = (ListView)fragmentView.findViewById(R.id.listView);
+        adapter = new PokemonListViewAdapter(activity, //context
+                R.layout.row_view_pokemon_list, //row view layout id
+                pokemonInfos); //data
 
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(this);
+
+        alertDialog = new AlertDialog.Builder(activity)
+                .setMessage("你確定要丟棄神奇寶貝們嗎?")
+                .setTitle("警告")
+                .setNegativeButton("取消", this)
+                .setPositiveButton("確認", this)
+                .setCancelable(false)
+                .create();
+
+        setHasOptionsMenu(true);
+
+        return fragmentView;
+    }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+        if(which == AlertDialog.BUTTON_NEGATIVE) {
+            Toast.makeText(activity, "取消丟棄", Toast.LENGTH_SHORT).show();
+        }
+        else if(which == AlertDialog.BUTTON_POSITIVE) {
+            for(PokemonInfo pokemonInfo : adapter.selectedPokemons) {
+                adapter.remove(pokemonInfo);
+            }
+
+        }
+    }
+
+    public final static int detailActivityRequestCode = 1;
+    public final static int removeFromList = 1;
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        PokemonInfo pokemonInfo = adapter.getItem(position);
+        Intent intent = new Intent(activity, PokemonDetailActivity.class);
+        intent.putExtra(PokemonInfo.parcelKey, pokemonInfo);
+        startActivityForResult(intent, detailActivityRequestCode);
+    }
 }
