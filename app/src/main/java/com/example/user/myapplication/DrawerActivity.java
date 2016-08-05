@@ -59,6 +59,7 @@ public class DrawerActivity extends AppCompatActivity{
         buildDrawerHeader(false, savedInstanceState);
         drawer = new DrawerBuilder()
                 .withActivity(this)
+                .withToolbar(toolbar)
                 .withAccountHeader(headerResult)
                 .inflateMenu(R.menu.drawer_menu)
                 .withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {
