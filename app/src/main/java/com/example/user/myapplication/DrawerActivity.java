@@ -23,7 +23,7 @@ import com.mikepenz.materialdrawer.model.interfaces.IProfile;
 /**
  * Created by user on 2016/8/4.
  */
-public class DrawerActivity extends AppCompatActivity{
+public class DrawerActivity extends AppCompatActivity implements FragmentManager.OnBackStackChangedListener{
 
     Toolbar toolbar;
     AccountHeader headerResult;
@@ -43,6 +43,7 @@ public class DrawerActivity extends AppCompatActivity{
         fragments[2] = TestFragment.newInstance("fake 2");
 
         fragmentManager = getFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(this);
         for(int i = fragments.length - 1;i >= 0;i--) {
             replaceWithFragment(fragments[i]);
         }
@@ -107,9 +108,22 @@ public class DrawerActivity extends AppCompatActivity{
         if(drawer != null && drawer.isDrawerOpen()) {
             drawer.closeDrawer();
         }
+        else if(fragmentManager.getBackStackEntryCount() > 0) {
+            fragmentManager.popBackStack();
+        }
         else {
             super.onBackPressed();
         }
 
+    }
+
+    @Override
+    public void onBackStackChanged() {
+        for(int i = 0;i < fragments.length;i++) {
+            if(fragments[i].isVisible()) {
+                drawer.setSelectionAtPosition(i + 1, false);
+                break;
+            }
+        }
     }
 }
