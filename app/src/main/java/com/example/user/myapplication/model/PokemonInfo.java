@@ -3,14 +3,26 @@ package com.example.user.myapplication.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.ParseClassName;
+import com.parse.ParseObject;
+
 /**
  * Created by lab430 on 16/7/16.
  */
-public class PokemonInfo implements Parcelable {
+@ParseClassName("PokemonInfo")
+public class PokemonInfo extends ParseObject implements Parcelable {
 
     public final static String parcelKey = "PokemonInfo.parcel";
     public final static String nameKey = "PokemonInfo.name";
-
+    public final static String listImgIdKey = "PokemonInfo.listImgId";
+    public final static String levelKey = "PokemonInfo.level";
+    public final static String currentHPKey = "PokemonInfo.currentHP";
+    public final static String maxHPKey = "PokemonInfo.maxHP";
+    public final static String type1Key = "PokemonInfo.type1";
+    public final static String type2Key = "PokemonInfo.type2";
+    public final static String skillKey = "PokemonInfo.skill";
+    public final static String detailImgIdKey = "PokemonInfo.detailImgId";
+    
     public final static int numCurrentSkills = 4;
     public static String[] typeNames;
 
