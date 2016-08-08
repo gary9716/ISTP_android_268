@@ -22,6 +22,9 @@ import android.os.Handler;
 
 import com.example.user.myapplication.model.OwningPokemonDataManager;
 import com.example.user.myapplication.model.PokemonInfo;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.login.widget.LoginButton;
 
 import java.util.ArrayList;
 
@@ -42,6 +45,8 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
 
     String nameOfTheTrainer = null;
     public final static String nameEditTextKey = "nameOfTheTrainer";
+    public final static String profileImgUrlKey = "profileImgUrlKey";
+    public final static String emailKey = "emailKey";
 
     public enum UISetting {
         Initial,
@@ -49,6 +54,10 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
     }
 
     UISetting uiSetting;
+
+    LoginButton loginButton;
+    CallbackManager callbackManager;
+    AccessToken accessToken;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +84,23 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
                 .build());
 
         preferences = getSharedPreferences(Application.class.getName(), MODE_PRIVATE);
+        AccessToken currentToken;
+        currentToken = AccessToken.getCurrentAccessToken();
+        if(currentToken != null) {
+            accessToken = currentToken;
+        }
+        else {
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove(nameEditTextKey);
+            editor.remove(profileImgUrlKey);
+            editor.remove(emailKey);
+            editor.commit();
+
+            accessToken = null;
+        }
+
+        loginButton = (LoginButton)findViewById(R.id.login_button);
+
         selectedOptionIndex = preferences.getInt(optionSelectedKey, selectedOptionIndex);
         nameOfTheTrainer = preferences.getString(nameEditTextKey, nameOfTheTrainer);
 
