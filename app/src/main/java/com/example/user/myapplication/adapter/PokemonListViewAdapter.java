@@ -65,7 +65,7 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
 
         for(int i = 0;i < getCount();i++) {
             PokemonInfo pokemonInfo = getItem(i);
-            if(name.equals(pokemonInfo.name)) {
+            if(name.equals(pokemonInfo.getName())) {
                 return pokemonInfo;
             }
         }
@@ -74,11 +74,11 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
     }
 
     public void update(PokemonInfo newData) {
-        PokemonInfo oldData = getItemWithName(newData.name);
-        oldData.skill = newData.skill;
-        oldData.currentHP = newData.currentHP;
-        oldData.maxHP = newData.maxHP;
-        oldData.level = newData.level;
+        PokemonInfo oldData = getItemWithName(newData.getName());
+        oldData.setSkill(newData.getSkill());
+        oldData.setCurrentHP(newData.getCurrentHP());
+        oldData.setMaxHP(newData.getMaxHP());
+        oldData.setLevel(newData.getLevel());
         notifyDataSetChanged();
     }
 
@@ -109,13 +109,13 @@ public class PokemonListViewAdapter extends ArrayAdapter<PokemonInfo> {
 
         public void setView(PokemonInfo pokemonInfo) {
             mRowView.setActivated(pokemonInfo.isSelected);
-            currentHPText.setText(String.valueOf(pokemonInfo.currentHP));
-            maxHPText.setText(String.valueOf(pokemonInfo.maxHP));
-            levelText.setText(String.valueOf(pokemonInfo.level));
-            nameText.setText(String.valueOf(pokemonInfo.name));
-            int progress = (int)((((float)pokemonInfo.currentHP)/pokemonInfo.maxHP) * 100);
+            currentHPText.setText(String.valueOf(pokemonInfo.getCurrentHP()));
+            maxHPText.setText(String.valueOf(pokemonInfo.getMaxHP()));
+            levelText.setText(String.valueOf(pokemonInfo.getLevel()));
+            nameText.setText(String.valueOf(pokemonInfo.getName()));
+            int progress = (int)((((float) pokemonInfo.getCurrentHP())/ pokemonInfo.getMaxHP()) * 100);
             hpBar.setProgress(progress);
-            mPicasso.load(pokemonInfo.listImgId).into(appearanceImg);
+            mPicasso.load(pokemonInfo.getListImgId()).into(appearanceImg);
             mPokemonInfo = pokemonInfo;
         }
 

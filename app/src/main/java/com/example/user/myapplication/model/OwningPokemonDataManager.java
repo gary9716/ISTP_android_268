@@ -65,17 +65,17 @@ public class OwningPokemonDataManager {
 
     private PokemonInfo constructPokemonInfo(String[] dataFields) {
         PokemonInfo pokemonInfo = new PokemonInfo();
-        pokemonInfo.detailImgId = mRes.getIdentifier("detail_" + dataFields[1],"drawable",packageName);
-        pokemonInfo.listImgId = mRes.getIdentifier("list_" + dataFields[1],"drawable",packageName);
-        pokemonInfo.name = dataFields[2];
-        pokemonInfo.level = Integer.valueOf(dataFields[3]);
-        pokemonInfo.currentHP = Integer.valueOf(dataFields[4]);
-        pokemonInfo.maxHP = Integer.valueOf(dataFields[5]);
-        pokemonInfo.type_1 = Integer.valueOf(dataFields[6]);
-        pokemonInfo.type_2 = Integer.valueOf(dataFields[7]);
+        pokemonInfo.setDetailImgId(mRes.getIdentifier("detail_" + dataFields[1],"drawable",packageName));
+        pokemonInfo.setListImgId(mRes.getIdentifier("list_" + dataFields[1],"drawable",packageName));
+        pokemonInfo.setName(dataFields[2]);
+        pokemonInfo.setLevel(Integer.valueOf(dataFields[3]));
+        pokemonInfo.setCurrentHP(Integer.valueOf(dataFields[4]));
+        pokemonInfo.setMaxHP(Integer.valueOf(dataFields[5]));
+        pokemonInfo.setType_1(Integer.valueOf(dataFields[6]));
+        pokemonInfo.setType_2(Integer.valueOf(dataFields[7]));
         //if strings are not enough, rest of array index would point to null.
         for(int i = skill_startIndex;i < dataFields.length;i++) {
-            pokemonInfo.skill[i - skill_startIndex] = dataFields[i];
+            pokemonInfo.getSkill()[i - skill_startIndex] = dataFields[i];
         }
 
         return pokemonInfo;

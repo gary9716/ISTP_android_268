@@ -4,14 +4,11 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Adapter;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -111,7 +108,7 @@ public class PokemonListActivity extends CustomizedActivity implements AdapterVi
                 if(pokemonInfo != null) {
                     adapter.remove(pokemonInfo);
                     adapter.selectedPokemons.remove(pokemonInfo);
-                    Toast.makeText(this, pokemonInfo.name + "已被存入電腦", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, pokemonInfo.getName() + "已被存入電腦", Toast.LENGTH_LONG).show();
                 }
             }
         }

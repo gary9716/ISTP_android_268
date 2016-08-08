@@ -3,8 +3,6 @@ package com.example.user.myapplication;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -66,35 +64,35 @@ public class PokemonDetailActivity extends CustomizedActivity {
         }
 
         //bind with data
-        mPicasso.load(mPokemonInfo.detailImgId).into(appearanceImg);
-        nameText.setText(mPokemonInfo.name);
-        levelText.setText(String.valueOf(mPokemonInfo.level));
-        currentHP.setText(String.valueOf(mPokemonInfo.currentHP));
-        maxHP.setText(String.valueOf(mPokemonInfo.maxHP));
-        if(mPokemonInfo.type_1 != -1) {
-            type_1.setText(PokemonInfo.typeNames[mPokemonInfo.type_1]);
+        mPicasso.load(mPokemonInfo.getDetailImgId()).into(appearanceImg);
+        nameText.setText(mPokemonInfo.getName());
+        levelText.setText(String.valueOf(mPokemonInfo.getLevel()));
+        currentHP.setText(String.valueOf(mPokemonInfo.getCurrentHP()));
+        maxHP.setText(String.valueOf(mPokemonInfo.getMaxHP()));
+        if(mPokemonInfo.getType_1() != -1) {
+            type_1.setText(PokemonInfo.typeNames[mPokemonInfo.getType_1()]);
         }
         else {
             type_1.setText("");
         }
 
-        if(mPokemonInfo.type_2 != -1) {
-            type_2.setText(PokemonInfo.typeNames[mPokemonInfo.type_2]);
+        if(mPokemonInfo.getType_2() != -1) {
+            type_2.setText(PokemonInfo.typeNames[mPokemonInfo.getType_2()]);
         }
         else {
             type_2.setText("");
         }
 
         for(int i = 0;i < PokemonInfo.numCurrentSkills;i++) {
-            if(mPokemonInfo.skill[i] != null) {
-                skillText[i].setText(mPokemonInfo.skill[i]);
+            if(mPokemonInfo.getSkill()[i] != null) {
+                skillText[i].setText(mPokemonInfo.getSkill()[i]);
             }
             else {
                 skillText[i].setText("");
             }
         }
 
-        int progress = (int)((((float)mPokemonInfo.currentHP)/mPokemonInfo.maxHP) * 100);
+        int progress = (int)((((float) mPokemonInfo.getCurrentHP())/ mPokemonInfo.getMaxHP()) * 100);
         hpBar.setProgress(progress);
 
     }
@@ -110,7 +108,7 @@ public class PokemonDetailActivity extends CustomizedActivity {
         int itemId = item.getItemId();
         if(itemId == R.id.action_save) {
             Intent intent = new Intent();
-            intent.putExtra(PokemonInfo.nameKey, mPokemonInfo.name);
+            intent.putExtra(PokemonInfo.nameKey, mPokemonInfo.getName());
             setResult(PokemonListActivity.removeFromList, intent);
             finish();
             return true;
