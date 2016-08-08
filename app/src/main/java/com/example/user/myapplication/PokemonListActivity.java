@@ -110,6 +110,7 @@ public class PokemonListActivity extends CustomizedActivity implements AdapterVi
                 PokemonInfo pokemonInfo = adapter.getItemWithName(pokemonName);
                 if(pokemonInfo != null) {
                     adapter.remove(pokemonInfo);
+                    adapter.selectedPokemons.remove(pokemonInfo);
                     Toast.makeText(this, pokemonInfo.name + "已被存入電腦", Toast.LENGTH_LONG).show();
                 }
             }
@@ -129,7 +130,7 @@ public class PokemonListActivity extends CustomizedActivity implements AdapterVi
             for(PokemonInfo pokemonInfo : adapter.selectedPokemons) {
                 adapter.remove(pokemonInfo);
             }
-
+            adapter.selectedPokemons.clear();
         }
 
     }

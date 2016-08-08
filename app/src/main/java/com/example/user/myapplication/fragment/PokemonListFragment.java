@@ -94,6 +94,7 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
             for(PokemonInfo pokemonInfo : adapter.selectedPokemons) {
                 adapter.remove(pokemonInfo);
             }
+            adapter.selectedPokemons.clear();
 
         }
     }
@@ -118,6 +119,7 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
                 PokemonInfo pokemonInfo = adapter.getItemWithName(pokemonName);
                 if(pokemonInfo != null) {
                     adapter.remove(pokemonInfo);
+                    adapter.selectedPokemons.remove(pokemonInfo);
                     Toast.makeText(activity, pokemonInfo.name + "已被存入電腦", Toast.LENGTH_LONG).show();
                 }
             }
