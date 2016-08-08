@@ -24,7 +24,14 @@ import com.example.user.myapplication.model.OwningPokemonDataManager;
 import com.example.user.myapplication.model.PokemonInfo;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -34,7 +41,6 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
 
     TextView infoText;
     RadioGroup optionGrp;
-    EditText name_editText;
     int selectedOptionIndex = 0;
     Button confirm_button;
     String[] pokemonNames = new String[]{
@@ -62,7 +68,7 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_fb_login);
 
         confirm_button = (Button)findViewById(R.id.confirm_button);
         confirm_button.setOnClickListener(this);
@@ -71,9 +77,6 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
         optionGrp.setOnCheckedChangeListener(this);
 
         infoText = (TextView) findViewById(R.id.infoText);
-        name_editText = (EditText) findViewById(R.id.name_editText);
-        name_editText.setOnEditorActionListener(this);
-        name_editText.setImeOptions(EditorInfo.IME_ACTION_DONE);
 
         progressBar = (ProgressBar)findViewById(R.id.progressBar);
         progressBar.setIndeterminateDrawable(new CircularProgressDrawable
@@ -100,6 +103,7 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
         }
 
         loginButton = (LoginButton)findViewById(R.id.login_button);
+        setupFBLogin();
 
         selectedOptionIndex = preferences.getInt(optionSelectedKey, selectedOptionIndex);
         nameOfTheTrainer = preferences.getString(nameEditTextKey, nameOfTheTrainer);
@@ -114,9 +118,64 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
         changeUIAccordingToRecord();
     }
 
+    public void setupFBLogin() {
+        callbackManager = CallbackManager.Factory.create();
+
+        loginButton.setReadPermissions("public_profile", "email");
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                accessToken = loginResult.getAccessToken();
+                sendGraphRequest();
+            }
+
+            @Override
+            public void onCancel() {
+
+            }
+
+            @Override
+            public void onError(FacebookException error) {
+
+            }
+        });
+
+    }
+
+    public void sendGraphRequest() {
+        if(accessToken != null) {
+            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject object, GraphResponse response) {
+                    if(response != null) {
+                        Log.d("FB", object.toString());
+                        Log.d("FB", object.optString("name"));
+                        Log.d("FB", object.optString("email"));
+                        Log.d("FB", object.optString("id"));
+                        if(object.has("picture")) {
+                            try {
+                                String profilePicUrl = object.getJSONObject("picture")
+                                        .getJSONObject("data")
+                                        .getString("url");
+                                Log.d("FB",profilePicUrl);
+                            }
+                            catch(Exception e) {
+                            }
+                        }
+                    }
+                }
+            });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields","id,email,name,picture.type(large)");
+            request.setParameters(parameters);
+            request.executeAsync();
+        }
+    }
+
+
     private void changeUIAccordingToRecord() {
         if(uiSetting == UISetting.DataIsKnown) {
-            name_editText.setVisibility(View.INVISIBLE);
             confirm_button.setVisibility(View.INVISIBLE);
             optionGrp.setVisibility(View.INVISIBLE);
 
@@ -125,7 +184,6 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
             confirm_button.performClick();
         }
         else {
-            name_editText.setVisibility(View.VISIBLE);
             confirm_button.setVisibility(View.VISIBLE);
             optionGrp.setVisibility(View.VISIBLE);
 
@@ -197,7 +255,6 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
         if(viewId == R.id.confirm_button) {
             v.setClickable(false);
             if(uiSetting == UISetting.Initial) {
-                nameOfTheTrainer = name_editText.getText().toString();
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString(nameEditTextKey, nameOfTheTrainer);
                 editor.putInt(optionSelectedKey, selectedOptionIndex);
@@ -252,5 +309,9 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }
