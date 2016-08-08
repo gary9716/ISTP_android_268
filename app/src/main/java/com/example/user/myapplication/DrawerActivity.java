@@ -1,8 +1,10 @@
 package com.example.user.myapplication;
 
+import android.app.Application;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -51,11 +53,25 @@ public class DrawerActivity extends AppCompatActivity implements FragmentManager
         toolbar = (Toolbar)findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Drawable profileIcon = Utils.getDrawable(this, R.drawable.profile3);
-        profile = new ProfileDrawerItem()
-                .withName("Batman")
-                .withEmail("batman@gmail.com")
-                .withIcon(profileIcon);
+        SharedPreferences preferences = getSharedPreferences(Application.class.getName(), MODE_PRIVATE);
+        String name = preferences.getString(MainActivity.nameEditTextKey, "Batman");
+        String email = preferences.getString(MainActivity.emailKey, "batman@gmail.com");
+        String url = preferences.getString(MainActivity.profileImgUrlKey, null);
+        if(url == null) {
+            Drawable profileIcon = Utils.getDrawable(this, R.drawable.profile3);
+            profile = new ProfileDrawerItem()
+                    .withName(name)
+                    .withEmail(email)
+                    .withIcon(profileIcon);
+        }
+        else {
+            profile = new ProfileDrawerItem()
+                    .withName(name)
+                    .withEmail(email)
+                    .withIcon(url);
+        }
+
+
 
         buildDrawerHeader(false, savedInstanceState);
         drawer = new DrawerBuilder()
