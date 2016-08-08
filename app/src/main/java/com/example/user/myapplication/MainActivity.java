@@ -148,20 +148,27 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
                 @Override
                 public void onCompleted(JSONObject object, GraphResponse response) {
                     if(response != null) {
-                        Log.d("FB", object.toString());
-                        Log.d("FB", object.optString("name"));
-                        Log.d("FB", object.optString("email"));
-                        Log.d("FB", object.optString("id"));
+//                        Log.d("FB", object.toString());
+//                        Log.d("FB", object.optString("name"));
+//                        Log.d("FB", object.optString("email"));
+//                        Log.d("FB", object.optString("id"));
+
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putString(nameEditTextKey, object.optString("name"));
+                        editor.putString(emailKey, object.optString("email"));
                         if(object.has("picture")) {
                             try {
                                 String profilePicUrl = object.getJSONObject("picture")
                                         .getJSONObject("data")
                                         .getString("url");
                                 Log.d("FB",profilePicUrl);
+                                editor.putString(profileImgUrlKey, profilePicUrl);
                             }
                             catch(Exception e) {
                             }
                         }
+
+                        editor.commit();
                     }
                 }
             });
@@ -178,14 +185,15 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
         if(uiSetting == UISetting.DataIsKnown) {
             confirm_button.setVisibility(View.INVISIBLE);
             optionGrp.setVisibility(View.INVISIBLE);
+            loginButton.setVisibility(View.INVISIBLE);
 
             progressBar.setVisibility(View.VISIBLE);
-
             confirm_button.performClick();
         }
         else {
             confirm_button.setVisibility(View.VISIBLE);
             optionGrp.setVisibility(View.VISIBLE);
+            loginButton.setVisibility(View.VISIBLE);
 
             progressBar.setVisibility(View.INVISIBLE);
         }
@@ -256,18 +264,18 @@ public class MainActivity extends CustomizedActivity implements View.OnClickList
             v.setClickable(false);
             if(uiSetting == UISetting.Initial) {
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putString(nameEditTextKey, nameOfTheTrainer);
                 editor.putInt(optionSelectedKey, selectedOptionIndex);
                 editor.commit();
             }
 
+            nameOfTheTrainer = preferences.getString(nameEditTextKey, nameOfTheTrainer);
             setInfoTextWithFormat();
 
             Handler handler = new Handler(MainActivity.this.getMainLooper());
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(MainActivity.this, PokemonListActivity.class);
+                    Intent intent = new Intent(MainActivity.this, DrawerActivity.class);
                     intent.putExtra(optionSelectedKey, selectedOptionIndex);
                     startActivity(intent);
                     finish();
