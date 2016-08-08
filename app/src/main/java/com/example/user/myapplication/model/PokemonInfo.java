@@ -71,4 +71,6 @@ public class PokemonInfo implements Parcelable {
             return new PokemonInfo[size];
         }
     };
+
+
 }
