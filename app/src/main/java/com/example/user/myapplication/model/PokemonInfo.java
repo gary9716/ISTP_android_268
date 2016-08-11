@@ -3,8 +3,11 @@ package com.example.user.myapplication.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.parse.FindCallback;
 import com.parse.ParseClassName;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,15 +19,17 @@ import java.util.List;
 public class PokemonInfo extends ParseObject implements Parcelable {
 
     public final static String parcelKey = "PokemonInfo.parcel";
-    public final static String nameKey = "PokemonInfo.name";
-    public final static String listImgIdKey = "PokemonInfo.listImgId";
-    public final static String levelKey = "PokemonInfo.level";
-    public final static String currentHPKey = "PokemonInfo.currentHP";
-    public final static String maxHPKey = "PokemonInfo.maxHP";
-    public final static String type1Key = "PokemonInfo.type1";
-    public final static String type2Key = "PokemonInfo.type2";
-    public final static String skillKey = "PokemonInfo.skill";
-    public final static String detailImgIdKey = "PokemonInfo.detailImgId";
+
+
+    public final static String nameKey = "name";
+    public final static String listImgIdKey = "listImgId";
+    public final static String levelKey = "level";
+    public final static String currentHPKey = "currentHP";
+    public final static String maxHPKey = "maxHP";
+    public final static String type1Key = "type1";
+    public final static String type2Key = "type2";
+    public final static String skillKey = "skill";
+    public final static String detailImgIdKey = "detailImgId";
 
     public final static int numCurrentSkills = 4;
     public static String[] typeNames;
@@ -164,4 +169,44 @@ public class PokemonInfo extends ParseObject implements Parcelable {
         put(skillKey, skillList);
         this.skill = skill;
     }
+
+    public static ParseQuery<PokemonInfo> getQuery() {
+        return ParseQuery.getQuery(PokemonInfo.class);
+    }
+
+    public static final String localDBTableName = PokemonInfo.class.getName();
+
+    public static void initTable(final ArrayList<PokemonInfo> pokemonInfos) {
+
+        PokemonInfo.getQuery().fromPin(localDBTableName).findInBackground(new FindCallback<PokemonInfo>() {
+            @Override
+            public void done(List<PokemonInfo> objects, ParseException e) {
+                if(e == null) { //no error
+                    //delete from remote
+                    for(PokemonInfo object : objects) {
+                        object.deleteEventually();
+                    }
+                    //delete from local
+                    PokemonInfo.unpinAllInBackground(objects);
+
+                    syncToDB(pokemonInfos);
+                }
+            }
+        });
+
+    }
+
+    public static void syncToDB(List<PokemonInfo> pokemonInfos) {
+        //save to local
+        PokemonInfo.pinAllInBackground(localDBTableName, pokemonInfos);
+
+        //save to remote
+        for(PokemonInfo pokemonInfo : pokemonInfos) {
+            pokemonInfo.saveEventually();
+        }
+    }
+
+
+
+
 }

@@ -2,9 +2,11 @@ package com.example.user.myapplication.fragment;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -45,17 +47,39 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
         return fragment;
     }
 
+    private final static String recordIsInDBKey = "recordIsInDB";
+
+    public void prepareListViewData() {
+        SharedPreferences preferences = activity.getSharedPreferences(Application.class.getName(), Activity.MODE_PRIVATE);
+        boolean recordIsInDB = preferences.getBoolean(recordIsInDBKey, false);
+
+        OwningPokemonDataManager dataManager = new OwningPokemonDataManager(activity);
+        dataManager.loadPokemonTypes();
+
+        if(!recordIsInDB) {
+            dataManager.loadListViewData();
+            int selectedPokemonIndex = activity.getIntent().getIntExtra(MainActivity.optionSelectedKey, 0);
+            PokemonInfo[] initThreePokemons = dataManager.getInitThreePokemonInfos();
+
+            pokemonInfos = dataManager.getPokemonInfos();
+            pokemonInfos.add(0, initThreePokemons[selectedPokemonIndex]);
+
+            //Save into DB
+
+            preferences.edit().putBoolean(recordIsInDBKey, true).commit();
+        }
+        else {
+
+            //load from DB
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         activity = getActivity();
+        prepareListViewData();
 
-        OwningPokemonDataManager dataManager = new OwningPokemonDataManager(activity);
-        int selectedPokemonIndex = activity.getIntent().getIntExtra(MainActivity.optionSelectedKey, 0);
-        PokemonInfo[] initThreePokemons = dataManager.getInitThreePokemonInfos();
-
-        pokemonInfos = dataManager.getPokemonInfos();
-        pokemonInfos.add(0, initThreePokemons[selectedPokemonIndex]);
 
     }
 

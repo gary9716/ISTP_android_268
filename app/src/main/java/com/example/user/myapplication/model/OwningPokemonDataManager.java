@@ -23,7 +23,19 @@ public class OwningPokemonDataManager {
         mContext = context;
         mRes = mContext.getResources();
         packageName = context.getPackageName();
-        loadListViewData();
+
+    }
+
+    public void loadPokemonTypes() {
+        BufferedReader reader;
+        try {
+            reader = new BufferedReader(new InputStreamReader(mContext.getAssets().open("pokemon_types.csv")));
+            PokemonInfo.typeNames = reader.readLine().split(",");
+            reader.close();
+        }
+        catch (Exception e) {
+
+        }
     }
 
     public void loadListViewData() {
@@ -32,11 +44,6 @@ public class OwningPokemonDataManager {
         String line = null;
         String[] dataFields = null;
         try {
-            //load pokemon types
-            reader = new BufferedReader(new InputStreamReader(mContext.getAssets().open("pokemon_types.csv")));
-            PokemonInfo.typeNames = reader.readLine().split(",");
-            reader.close();
-
             //load initial three pokemon data
             reader = new BufferedReader(new InputStreamReader(mContext.getAssets().open("init_pokemon_data.csv")));
             for(int i = 0;i < 3;i++) {
