@@ -40,7 +40,8 @@ public class DrawerActivity extends AppCompatActivity implements FragmentManager
         setContentView(R.layout.activity_drawer);
 
         fragments = new Fragment[3];
-        fragments[0] = PokemonListFragment.newInstance();
+//        fragments[0] = PokemonListFragment.newInstance();
+        fragments[0] = TestFragment.newInstance("fake 0");
         fragments[1] = TestFragment.newInstance("fake 1");
         fragments[2] = TestFragment.newInstance("fake 2");
 

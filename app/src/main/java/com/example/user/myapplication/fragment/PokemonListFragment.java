@@ -92,31 +92,33 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
         activity = getActivity();
         prepareListViewData();
 
-
     }
+
+    View fragmentView = null;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View fragmentView = inflater.inflate(R.layout.activity_pokemon_list, container, false);
-        ListView listView = (ListView)fragmentView.findViewById(R.id.listView);
-        adapter = new PokemonListViewAdapter(activity, //context
-                R.layout.row_view_pokemon_list, //row view layout id
-                pokemonInfos); //data
+        if(fragmentView == null) {
+            fragmentView = inflater.inflate(R.layout.activity_pokemon_list, container, false);
+            ListView listView = (ListView) fragmentView.findViewById(R.id.listView);
+            adapter = new PokemonListViewAdapter(activity, //context
+                    R.layout.row_view_pokemon_list, //row view layout id
+                    pokemonInfos); //data
 
-        listView.setAdapter(adapter);
-        listView.setOnItemClickListener(this);
+            listView.setAdapter(adapter);
+            listView.setOnItemClickListener(this);
 
-        alertDialog = new AlertDialog.Builder(activity)
-                .setMessage("你確定要丟棄神奇寶貝們嗎?")
-                .setTitle("警告")
-                .setNegativeButton("取消", this)
-                .setPositiveButton("確認", this)
-                .setCancelable(false)
-                .create();
+            alertDialog = new AlertDialog.Builder(activity)
+                    .setMessage("你確定要丟棄神奇寶貝們嗎?")
+                    .setTitle("警告")
+                    .setNegativeButton("取消", this)
+                    .setPositiveButton("確認", this)
+                    .setCancelable(false)
+                    .create();
 
-        setHasOptionsMenu(true);
-
+            setHasOptionsMenu(true);
+        }
         return fragmentView;
     }
 
