@@ -22,8 +22,8 @@ public class MyApplication extends Application {
         ParseObject.registerSubclass(PokemonInfo.class);
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
                 .enableLocalDataStore()
-                .applicationId("aBriKu0h4EZgnb8Sft9Uv4HyDZHOj01WZQp3jPs1")
-                .clientKey("YJy27NUjuLfJaicKAFReic3gpCFxdemFsPrsQj05")
+                .applicationId("aBriKu0h4EZgnb8Sft9Uv4HyDZHOj01WZQp3jPs1") //change to your AppId
+                .clientKey("YJy27NUjuLfJaicKAFReic3gpCFxdemFsPrsQj05") //change to your clientKey
                 .server("https://parseapi.back4app.com/")
                 .build());
 

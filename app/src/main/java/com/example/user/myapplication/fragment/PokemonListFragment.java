@@ -26,13 +26,17 @@ import com.example.user.myapplication.R;
 import com.example.user.myapplication.adapter.PokemonListViewAdapter;
 import com.example.user.myapplication.model.OwningPokemonDataManager;
 import com.example.user.myapplication.model.PokemonInfo;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by user on 2016/8/4.
  */
-public class PokemonListFragment extends Fragment implements AdapterView.OnItemClickListener, DialogInterface.OnClickListener{
+public class PokemonListFragment extends Fragment implements AdapterView.OnItemClickListener, DialogInterface.OnClickListener, FindCallback<PokemonInfo>{
 
     private Activity activity;
     private ArrayList<PokemonInfo> pokemonInfos;
@@ -56,21 +60,29 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
         OwningPokemonDataManager dataManager = new OwningPokemonDataManager(activity);
         dataManager.loadPokemonTypes();
 
+        pokemonInfos = new ArrayList<>();
+
         if(!recordIsInDB) {
             dataManager.loadListViewData();
             int selectedPokemonIndex = activity.getIntent().getIntExtra(MainActivity.optionSelectedKey, 0);
             PokemonInfo[] initThreePokemons = dataManager.getInitThreePokemonInfos();
 
-            pokemonInfos = dataManager.getPokemonInfos();
+            ArrayList<PokemonInfo> tempInfos = dataManager.getPokemonInfos();
+            for(PokemonInfo pokemonInfo : tempInfos) {
+                pokemonInfos.add(pokemonInfo);
+            }
             pokemonInfos.add(0, initThreePokemons[selectedPokemonIndex]);
 
             //Save into DB
-
+            PokemonInfo.initTable(pokemonInfos);
             preferences.edit().putBoolean(recordIsInDBKey, true).commit();
         }
         else {
-
             //load from DB
+            ParseQuery<PokemonInfo> query = PokemonInfo.getQuery();
+            query.fromPin(PokemonInfo.localDBTableName).findInBackground(this);
+            query = PokemonInfo.getQuery();
+            query.findInBackground(this);
         }
     }
 
@@ -116,7 +128,7 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
         }
         else if(which == AlertDialog.BUTTON_POSITIVE) {
             for(PokemonInfo pokemonInfo : adapter.selectedPokemons) {
-                adapter.remove(pokemonInfo);
+                removePokemonInfo(pokemonInfo);
             }
             adapter.selectedPokemons.clear();
 
@@ -142,7 +154,7 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
                 String pokemonName = data.getStringExtra(PokemonInfo.nameKey);
                 PokemonInfo pokemonInfo = adapter.getItemWithName(pokemonName);
                 if(pokemonInfo != null) {
-                    adapter.remove(pokemonInfo);
+                    removePokemonInfo(pokemonInfo);
                     adapter.selectedPokemons.remove(pokemonInfo);
                     Toast.makeText(activity, pokemonInfo.getName() + "已被存入電腦", Toast.LENGTH_LONG).show();
                 }
@@ -177,4 +189,25 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
         return false;
     }
 
+    public void removePokemonInfo(PokemonInfo pokemonInfo) {
+        adapter.remove(pokemonInfo);
+        //remove from database
+        pokemonInfo.unpinInBackground(PokemonInfo.localDBTableName);
+        pokemonInfo.deleteEventually();
+
+    }
+
+    @Override
+    public void done(List<PokemonInfo> objects, ParseException e) {
+        if(e == null) {
+            pokemonInfos.clear();
+            for(PokemonInfo object : objects) {
+                pokemonInfos.add(object);
+            }
+        }
+
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
 }
