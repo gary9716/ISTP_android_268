@@ -6,6 +6,9 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,6 +34,7 @@ import java.util.List;
 public class PokemonSearchFragment extends Fragment implements DialogInterface.OnClickListener{
 
     AlertDialog searchDialog;
+    DialogViewHolder dialogViewHolder = null;
     View fragmentView;
     TextView infoText;
     public ArrayList<String> typeList = null;
@@ -58,6 +62,11 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
                     typeList = object.getTypeArray();
                     if (typeList != null) {
                         setMenuVisibility(true);
+                        //this callback is called after onCreateView
+                        if (dialogViewHolder != null) {
+                            dialogViewHolder.setTypeList(0, typeList);
+                            dialogViewHolder.setTypeList(1, typeList);
+                        }
                     } else {
                         setMenuVisibility(false);
                         Toast.makeText(getActivity(), "沒抓到屬性列表,確保網路是開啟的", Toast.LENGTH_LONG).show();
@@ -91,7 +100,7 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
         if(fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_search, container, false);
             listView = (ListView)fragmentView.findViewById(R.id.listView2);
-            //TODO: set adapter
+            //TODO: set list view adapter
             infoText = (TextView)fragmentView.findViewById(R.id.infoText);
         }
 
@@ -99,7 +108,13 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
 
         if(searchDialog == null) {
             View dialogView = inflater.inflate(R.layout.search_form, null);
+            dialogViewHolder = new DialogViewHolder(dialogView);
 
+            //PokemonType callback is called before onCreateView
+            if(typeList != null) {
+                dialogViewHolder.setTypeList(0, typeList);
+                dialogViewHolder.setTypeList(1, typeList);
+            }
             searchDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
                                         .setNegativeButton("取消", this)
                                         .setPositiveButton("搜尋", this)
@@ -107,6 +122,22 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
         }
 
         return fragmentView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.search_fragment_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        if(itemId == R.id.action_search) {
+            searchDialog.show();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -206,14 +237,6 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
             typeSelectors[typeIndex].setAdapter(adapter);
 
         }
-
-
-
-
-
-
-
-
 
     }
 
