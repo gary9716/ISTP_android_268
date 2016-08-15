@@ -15,7 +15,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox"
+            android:id="@+id/conditionBox1"
             android:layout_gravity="center_vertical"
             android:layout_marginRight="20dp" />
 
@@ -31,7 +31,7 @@
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/editText"
+            android:id="@+id/nameText"
             android:layout_gravity="center_vertical"
             android:hint="輸入部分的名字即可" />
     </LinearLayout>
@@ -47,7 +47,7 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox2"
+            android:id="@+id/conditionBox2"
             android:layout_gravity="center_vertical" />
 
         <TextView
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/editText2"
+                    android:id="@+id/leftInterval"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical" />
 
@@ -97,7 +97,7 @@
                     android:layout_height="wrap_content"
                     android:inputType="numberDecimal"
                     android:ems="10"
-                    android:id="@+id/editText3"
+                    android:id="@+id/rightInterval"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical" />
             </LinearLayout>
@@ -106,7 +106,24 @@
                 android:orientation="horizontal"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"></LinearLayout>
+                android:layout_weight="1">
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="無左邊界"
+                    android:id="@+id/leftIntervalConditionBox"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+
+                <CheckBox
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="無右邊界"
+                    android:id="@+id/rightIntervalConditionBox"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical" />
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -121,7 +138,30 @@
         <CheckBox
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/checkBox3"
+            android:id="@+id/conditionBox3"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="屬性"
+            android:id="@+id/textView11"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="30dp" />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/type1Selector"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical" />
+
+        <Spinner
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/type2Selector"
+            android:layout_weight="1"
             android:layout_gravity="center_vertical" />
     </LinearLayout>
 </LinearLayout>
