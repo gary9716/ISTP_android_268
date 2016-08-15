@@ -2,6 +2,8 @@ package com.example.user.myapplication.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import com.example.user.myapplication.fragment.PokemonSearchFragment;
@@ -30,8 +32,36 @@ public class PokemonSearchListViewAdapter extends ArrayAdapter<SearchPokemonInfo
 
     }
 
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        SearchPokemonInfo dataItem = getItem(position);
+        ViewHolder viewHolder = null;
+        if(convertView == null) {
+            convertView = inflater.inflate(mRowViewLayoutId, parent, false);
+            viewHolder = new ViewHolder(convertView, this);
+            convertView.setTag(viewHolder);
+        }
+        else {
+            viewHolder = (ViewHolder)convertView.getTag();
+        }
 
+        viewHolder.setView(dataItem);
 
+        return convertView;
+
+    }
+
+    public static class ViewHolder {
+
+        ViewHolder(View rowView, PokemonSearchListViewAdapter adapter) {
+
+        }
+
+        public void setView(SearchPokemonInfo data) {
+
+        }
+
+    }
 
 
 }
