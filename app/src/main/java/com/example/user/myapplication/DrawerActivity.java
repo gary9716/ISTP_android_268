@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.user.myapplication.fragment.PokemonListFragment;
+import com.example.user.myapplication.fragment.PokemonSearchFragment;
 import com.example.user.myapplication.fragment.TestFragment;
 import com.example.user.myapplication.model.Utils;
 import com.mikepenz.materialdrawer.AccountHeader;
@@ -42,7 +43,7 @@ public class DrawerActivity extends AppCompatActivity implements FragmentManager
         fragments = new Fragment[3];
 //        fragments[0] = PokemonListFragment.newInstance();
         fragments[0] = TestFragment.newInstance("fake 0");
-        fragments[1] = TestFragment.newInstance("fake 1");
+        fragments[1] = PokemonSearchFragment.newInstance();
         fragments[2] = TestFragment.newInstance("fake 2");
 
         fragmentManager = getFragmentManager();

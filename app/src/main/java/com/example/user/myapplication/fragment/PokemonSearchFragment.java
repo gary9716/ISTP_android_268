@@ -20,10 +20,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.user.myapplication.R;
+import com.example.user.myapplication.adapter.PokemonSearchListViewAdapter;
 import com.example.user.myapplication.model.PokemonType;
 import com.example.user.myapplication.model.SearchPokemonInfo;
+import com.parse.FindCallback;
 import com.parse.GetCallback;
+import com.parse.Parse;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
     public ArrayList<String> typeList = null;
     ArrayList<SearchPokemonInfo> searchResult = new ArrayList<>();
     ListView listView;
+    PokemonSearchListViewAdapter adapter;
 
     public static PokemonSearchFragment newInstance() {
 
@@ -54,7 +59,10 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         setMenuVisibility(false);
-
+        adapter = new PokemonSearchListViewAdapter(getActivity(),
+                R.layout.search_row_view,
+                searchResult,
+                this);
         PokemonType.getQuery().getFirstInBackground(new GetCallback<PokemonType>() {
             @Override
             public void done(PokemonType object, ParseException e) {
@@ -100,7 +108,7 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
         if(fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_search, container, false);
             listView = (ListView)fragmentView.findViewById(R.id.listView2);
-            //TODO: set list view adapter
+            listView.setAdapter(adapter);
             infoText = (TextView)fragmentView.findViewById(R.id.infoText);
         }
 
@@ -153,8 +161,77 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
     }
 
     private void startSearching() {
+        ParseQuery<SearchPokemonInfo> query = SearchPokemonInfo.getQuery();
+        CustomizedFindCallback findCallback = new CustomizedFindCallback(searchResult,
+                                                                        this);
+        if(dialogViewHolder.conditionIsUsed(0)) {
+            query = query.whereContains(SearchPokemonInfo.nameKey,
+                    dialogViewHolder.getInputName());
+        }
 
+        if(dialogViewHolder.conditionIsUsed(1)) {
+            if(dialogViewHolder.constrainedByLeftInterval()) {
+                query = query.whereGreaterThan(SearchPokemonInfo.hpKey, dialogViewHolder.getLeftIntervalVal());
+            }
+
+            if(dialogViewHolder.constrainedByRightInterval()) {
+                query = query.whereLessThan(SearchPokemonInfo.hpKey, dialogViewHolder.getRightIntervalVal());
+            }
+        }
+
+        if(dialogViewHolder.conditionIsUsed(2)) {
+            ArrayList<Integer> typesCondition = new ArrayList<>();
+            for(int i = 0;i < 2;i++) {
+                int selectType = dialogViewHolder.getSelectType(i);
+                if(selectType != -1) {
+                    typesCondition.add(selectType);
+                }
+
+            }
+
+            findCallback.numTypesInCondition = typesCondition.size();
+            query = query.whereContainsAll(SearchPokemonInfo.typesKey, typesCondition);
+        }
+
+        query.findInBackground(findCallback);
     }
+
+    private static class CustomizedFindCallback implements FindCallback<SearchPokemonInfo> {
+
+        public int numTypesInCondition = -1;
+        private ArrayList<SearchPokemonInfo> searchResult;
+        private PokemonSearchFragment searchFragment;
+
+        CustomizedFindCallback(ArrayList<SearchPokemonInfo> resultBuffer,
+                               PokemonSearchFragment fragment) {
+
+            searchResult = resultBuffer;
+            searchFragment = fragment;
+
+        }
+
+        @Override
+        public void done(List<SearchPokemonInfo> objects, ParseException e) {
+            searchResult.clear();
+            if(numTypesInCondition != -1) {
+                for(SearchPokemonInfo searchPokemonInfo : objects) {
+                    ArrayList<Integer> typeIndices = searchPokemonInfo.getTypeIndices();
+                    if(typeIndices.size() == numTypesInCondition) {
+                        searchResult.add(searchPokemonInfo);
+                    }
+                }
+            }
+            else {
+                searchResult.addAll(objects);
+            }
+
+            searchFragment.hideOrShowInfoText(searchResult);
+            searchFragment.adapter.notifyDataSetChanged();
+        }
+    }
+
+
+
 
     public static class DialogViewHolder {
 
