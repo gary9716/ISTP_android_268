@@ -16,6 +16,7 @@ public class SearchPokemonInfo extends ParseObject {
     public final static String nameKey = "name";
     public final static String hpKey = "hp";
     public final static String typesKey = "types";
+    public final static String resIdKey = "resId";
 
     public static ParseQuery<SearchPokemonInfo> getQuery() {
         return ParseQuery.getQuery(SearchPokemonInfo.class);
@@ -33,7 +34,9 @@ public class SearchPokemonInfo extends ParseObject {
         return getInt(hpKey);
     }
 
-
+    public String getPokedex() {
+        return getString(resIdKey);
+    }
 
 
 }
