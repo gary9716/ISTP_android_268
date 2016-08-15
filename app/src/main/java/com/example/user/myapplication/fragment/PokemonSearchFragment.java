@@ -2,12 +2,17 @@ package com.example.user.myapplication.fragment;
 
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,7 +28,7 @@ import java.util.List;
 /**
  * Created by user on 2016/8/11.
  */
-public class PokemonSearchFragment extends Fragment {
+public class PokemonSearchFragment extends Fragment implements DialogInterface.OnClickListener{
 
     AlertDialog searchDialog;
     View fragmentView;
@@ -93,9 +98,123 @@ public class PokemonSearchFragment extends Fragment {
         hideOrShowInfoText(searchResult);
 
         if(searchDialog == null) {
+            View dialogView = inflater.inflate(R.layout.search_form, null);
 
+            searchDialog = new AlertDialog.Builder(getActivity()).setView(dialogView)
+                                        .setNegativeButton("取消", this)
+                                        .setPositiveButton("搜尋", this)
+                                        .create();
         }
 
         return fragmentView;
     }
+
+    @Override
+    public void onClick(DialogInterface dialog, int which) {
+
+        if(which == AlertDialog.BUTTON_POSITIVE) { //positive button was pressed
+            startSearching();
+        }
+        else if(which == AlertDialog.BUTTON_NEGATIVE) {
+
+        }
+
+    }
+
+    private void startSearching() {
+
+    }
+
+    public static class DialogViewHolder {
+
+        View dialogView;
+
+        CheckBox[] conditionBoxes = new CheckBox[3];
+        CheckBox leftIntervalBox;
+        CheckBox rightIntervalBox;
+
+        EditText nameText;
+        EditText leftIntervalText;
+        EditText rightIntervalText;
+        Spinner[] typeSelectors = new Spinner[2];
+
+        DialogViewHolder(View dialogView) {
+
+            this.dialogView = dialogView;
+            conditionBoxes[0] = (CheckBox)dialogView.findViewById(R.id.conditionBox1);
+            conditionBoxes[1] = (CheckBox)dialogView.findViewById(R.id.conditionBox2);
+            conditionBoxes[2] = (CheckBox)dialogView.findViewById(R.id.conditionBox3);
+            leftIntervalBox = (CheckBox)dialogView.findViewById(R.id.leftIntervalConditionBox);
+            rightIntervalBox = (CheckBox)dialogView.findViewById(R.id.rightIntervalConditionBox);
+
+            nameText = (EditText)dialogView.findViewById(R.id.nameText);
+            leftIntervalText = (EditText)dialogView.findViewById(R.id.leftInterval);
+            rightIntervalText = (EditText)dialogView.findViewById(R.id.rightInterval);
+
+            typeSelectors[0] = (Spinner)dialogView.findViewById(R.id.type1Selector);
+            typeSelectors[1] = (Spinner)dialogView.findViewById(R.id.type2Selector);
+
+        }
+
+
+        public String getInputName() {
+            return nameText.getText().toString();
+        }
+
+        public boolean constrainedByLeftInterval() {
+            return leftIntervalBox.isChecked();
+        }
+
+        public boolean constrainedByRightInterval() {
+            return rightIntervalBox.isChecked();
+        }
+
+        public float getLeftIntervalVal() {
+            return Float.valueOf(leftIntervalText.getText().toString());
+        }
+
+        public float getRightIntervalVal() {
+            return Float.valueOf(rightIntervalText.getText().toString());
+        }
+
+        public boolean conditionIsUsed(int index) {
+            if(index < 3) {
+                return conditionBoxes[index].isChecked();
+            }
+            else {
+                return false;
+            }
+        }
+
+        public int getSelectType(int typeIndex) {
+            int selectPos = typeSelectors[typeIndex].getSelectedItemPosition();
+            if(selectPos == 0) {
+                return -1;
+            }
+            else {
+                return selectPos - 1;
+            }
+        }
+
+        public void setTypeList(int typeIndex, ArrayList<String> typeList) {
+            if(!typeList.contains("none")) {
+                typeList.add(0, "none");
+            }
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(dialogView.getContext(), android.R.layout.simple_spinner_item, typeList);
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            typeSelectors[typeIndex].setAdapter(adapter);
+
+        }
+
+
+
+
+
+
+
+
+
+    }
+
 }
