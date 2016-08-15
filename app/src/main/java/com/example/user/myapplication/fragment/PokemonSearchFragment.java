@@ -177,6 +177,7 @@ public class PokemonSearchFragment extends Fragment implements DialogInterface.O
             if(dialogViewHolder.constrainedByRightInterval()) {
                 query = query.whereLessThan(SearchPokemonInfo.hpKey, dialogViewHolder.getRightIntervalVal());
             }
+            query = query.addAscendingOrder(SearchPokemonInfo.hpKey);
         }
 
         if(dialogViewHolder.conditionIsUsed(2)) {
