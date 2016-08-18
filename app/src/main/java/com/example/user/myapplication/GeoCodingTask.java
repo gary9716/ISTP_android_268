@@ -29,7 +29,7 @@ public class GeoCodingTask extends AsyncTask<String, Void, double[]> {
         else {
             return null;
         }
-        
+
     }
 
     @Override

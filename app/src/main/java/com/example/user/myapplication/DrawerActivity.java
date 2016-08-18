@@ -44,7 +44,7 @@ public class DrawerActivity extends AppCompatActivity implements FragmentManager
 //        fragments[0] = PokemonListFragment.newInstance();
         fragments[0] = TestFragment.newInstance("fake 0");
         fragments[1] = PokemonSearchFragment.newInstance();
-        fragments[2] = TestFragment.newInstance("fake 2");
+        fragments[2] = PokemonMapFragment.newInstance();
 
         fragmentManager = getFragmentManager();
         fragmentManager.addOnBackStackChangedListener(this);
