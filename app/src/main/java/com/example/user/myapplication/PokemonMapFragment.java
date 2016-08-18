@@ -68,7 +68,7 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
         mapSettings.setZoomGesturesEnabled(true);
 
     }
-    
+
     @Override
     public boolean onMarkerClick(Marker marker) {
         return false;
