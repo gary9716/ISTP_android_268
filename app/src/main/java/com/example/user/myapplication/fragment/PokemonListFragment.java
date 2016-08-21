@@ -81,8 +81,8 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
             //load from DB
             ParseQuery<PokemonInfo> query = PokemonInfo.getQuery();
             query.fromPin(PokemonInfo.localDBTableName).findInBackground(this);
-            query = PokemonInfo.getQuery();
-            query.findInBackground(this);
+//            query = PokemonInfo.getQuery();
+//            query.findInBackground(this);
         }
     }
 
@@ -195,7 +195,7 @@ public class PokemonListFragment extends Fragment implements AdapterView.OnItemC
         adapter.remove(pokemonInfo);
         //remove from database
         pokemonInfo.unpinInBackground(PokemonInfo.localDBTableName);
-        pokemonInfo.deleteEventually();
+//        pokemonInfo.deleteEventually();
 
     }
 

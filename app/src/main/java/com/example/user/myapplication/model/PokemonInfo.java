@@ -157,14 +157,37 @@ public class PokemonInfo extends ParseObject implements Parcelable {
         put(type2Key, type_2);
     }
 
+    boolean skillHaveBeenInited = false;
+    boolean skillHaveBeenModified = false;
+
     public String[] getSkill() {
-        return skill;
+        if(!skillHaveBeenInited) {
+            skillHaveBeenInited = true;
+            this.skill = readSkillFromParseStorage();
+        }
+        else if(skillHaveBeenModified) {
+            skillHaveBeenModified = false;
+            this.skill = readSkillFromParseStorage();
+        }
+        return this.skill;
+    }
+
+    private String[] readSkillFromParseStorage() {
+        ArrayList<String> skillList = (ArrayList)get(skillKey);
+        String[] skillArray = new String[numCurrentSkills];
+        if(skillList != null) {
+            for (int i = 0; i < skillList.size(); i++) {
+                skillArray[i] = skillList.get(i);
+            }
+        }
+        return skillArray;
     }
 
     public void setSkill(String[] skill) {
         List<String> skillList = new ArrayList<>(skill.length);
         for(String skillName : skill) {
-            skillList.add(skillName);
+            if(skillName != null)
+                skillList.add(skillName);
         }
         put(skillKey, skillList);
         this.skill = skill;
@@ -183,9 +206,9 @@ public class PokemonInfo extends ParseObject implements Parcelable {
             public void done(List<PokemonInfo> objects, ParseException e) {
                 if(e == null) { //no error
                     //delete from remote
-                    for(PokemonInfo object : objects) {
-                        object.deleteEventually();
-                    }
+//                    for(PokemonInfo object : objects) {
+//                        object.deleteEventually();
+//                    }
                     //delete from local
                     PokemonInfo.unpinAllInBackground(objects);
 
@@ -201,9 +224,9 @@ public class PokemonInfo extends ParseObject implements Parcelable {
         PokemonInfo.pinAllInBackground(localDBTableName, pokemonInfos);
 
         //save to remote
-        for(PokemonInfo pokemonInfo : pokemonInfos) {
-            pokemonInfo.saveEventually();
-        }
+//        for(PokemonInfo pokemonInfo : pokemonInfos) {
+//            pokemonInfo.saveEventually();
+//        }
     }
 
 

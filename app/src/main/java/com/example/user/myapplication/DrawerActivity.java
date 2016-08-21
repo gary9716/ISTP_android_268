@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.example.user.myapplication.fragment.PokemonListFragment;
+import com.example.user.myapplication.fragment.PokemonMapFragment;
 import com.example.user.myapplication.fragment.PokemonSearchFragment;
 import com.example.user.myapplication.fragment.TestFragment;
 import com.example.user.myapplication.model.Utils;
@@ -41,8 +42,8 @@ public class DrawerActivity extends AppCompatActivity implements FragmentManager
         setContentView(R.layout.activity_drawer);
 
         fragments = new Fragment[3];
-//        fragments[0] = PokemonListFragment.newInstance();
-        fragments[0] = TestFragment.newInstance("fake 0");
+        fragments[0] = PokemonListFragment.newInstance();
+//        fragments[0] = TestFragment.newInstance("fake 0");
         fragments[1] = PokemonSearchFragment.newInstance();
         fragments[2] = PokemonMapFragment.newInstance();
 

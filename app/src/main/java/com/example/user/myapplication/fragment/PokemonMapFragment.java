@@ -1,7 +1,8 @@
-package com.example.user.myapplication;
+package com.example.user.myapplication.fragment;
 
 import android.app.Fragment;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,7 +11,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.user.myapplication.GeoCodingTask;
+import com.example.user.myapplication.R;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -27,7 +31,7 @@ import android.Manifest;
 /**
  * Created by user on 2016/8/18.
  */
-public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GeoCodingTask.GeoCodingResponse, GoogleApiClient.ConnectionCallbacks {
+public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GeoCodingTask.GeoCodingResponse, GoogleApiClient.ConnectionCallbacks, com.google.android.gms.location.LocationListener {
 
     public static PokemonMapFragment newInstance() {
 
@@ -44,12 +48,14 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
     }
 
     View fragmentView;
+    MapFragment mapFragment;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if(fragmentView == null) {
+        if (fragmentView == null) {
             fragmentView = inflater.inflate(R.layout.fragment_map, container, false);
+            mapFragment = MapFragment.newInstance();
             setHasOptionsMenu(true);
             setMenuVisibility(true);
         }
@@ -60,7 +66,7 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MapFragment mapFragment = MapFragment.newInstance();
+
         mapFragment.getMapAsync(this);
         getChildFragmentManager().beginTransaction()
                 .replace(R.id.childFragmentContainer, mapFragment)
@@ -77,6 +83,8 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
         UiSettings mapSettings = googleMap.getUiSettings();
         mapSettings.setZoomControlsEnabled(true); //controlled by UI widgets
         mapSettings.setZoomGesturesEnabled(true);
+
+        createGoogleApiClient();
 
         (new GeoCodingTask(PokemonMapFragment.this)).execute("台北市羅斯福路四段一號");
     }
@@ -101,7 +109,7 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
     GoogleApiClient googleApiClient;
 
     private void createGoogleApiClient() {
-        if(googleApiClient == null) {
+        if (googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(getActivity())
                     .addConnectionCallbacks(this)
                     .addApi(LocationServices.API)
@@ -115,18 +123,18 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
 
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermission(ACCESS_FINE_LOCATION_REQUEST_CODE);
-        }
-        else {
+        } else {
+//            doAfterPermissionGranted();
             setMyLocationButtonEnabled();
         }
 
     }
 
     public void requestLocationPermission(int requestCode) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, requestCode);
         }
     }
@@ -134,19 +142,19 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if(requestCode == ACCESS_FINE_LOCATION_REQUEST_CODE) {
-            if(grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+        if (requestCode == ACCESS_FINE_LOCATION_REQUEST_CODE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                doAfterPermissionGranted();
                 setMyLocationButtonEnabled();
             }
         }
     }
 
     public void setMyLocationButtonEnabled() {
-        if(ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION)
                 != PackageManager.PERMISSION_GRANTED) {
             requestLocationPermission(ACCESS_FINE_LOCATION_REQUEST_CODE);
-        }
-        else {
+        } else {
             map.getUiSettings().setMyLocationButtonEnabled(true);
             map.setMyLocationEnabled(true);
         }
@@ -154,6 +162,32 @@ public class PokemonMapFragment extends Fragment implements OnMapReadyCallback, 
 
     @Override
     public void onConnectionSuspended(int i) {
+
+    }
+
+    LocationRequest locationRequest;
+
+    public void requestLocationUpdateService() {
+        if (locationRequest == null) {
+            locationRequest = new LocationRequest();
+            locationRequest.setInterval(5000);
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                return;
+            }
+            else {
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+            }
+        }
+    }
+
+    private void doAfterPermissionGranted() {
+        requestLocationUpdateService();
+        setMyLocationButtonEnabled();
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
 
     }
 }
